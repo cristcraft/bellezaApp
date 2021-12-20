@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Enviar correo con los productos", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Oprime los 3 puntos para agregar una ubucacion", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

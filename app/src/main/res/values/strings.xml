@@ -5,7 +5,8 @@
     <string name="nav_header_title">Belleza App</string>
     <string name="nav_header_subtitle">bellezaApp@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Ajustes</string>
+    <string name="action_product">Agregar Producto</string>
+    <string name="action_add">Agregar Sucursales</string>
 
     <string name="menu_home">BellezaApp</string>
     <string name="menu_gallery">Servicios</string>

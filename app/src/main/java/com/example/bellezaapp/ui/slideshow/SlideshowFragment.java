@@ -1,46 +1,90 @@
 package com.example.bellezaapp.ui.slideshow;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bellezaapp.R;
-import com.example.bellezaapp.databinding.FragmentSlideshowBinding;
+import com.example.bellezaapp.casos_uso.CasoUsoProductos;
+import com.example.bellezaapp.casos_uso.CasoUsoSucursal;
+import com.example.bellezaapp.datos.DBHelper;
+import com.example.bellezaapp.datos.DBHelper2;
+import com.example.bellezaapp.modelo.Producto;
+import com.example.bellezaapp.modelo.ProductoAdapter;
+import com.example.bellezaapp.modelo.SucurlasAdapter;
+import com.example.bellezaapp.modelo.Sucursal;
+import com.example.bellezaapp.ui.ProductFrom;
+import com.example.bellezaapp.ui.SucursalFrom;
+
+import java.util.ArrayList;
 
 public class SlideshowFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
-    private FragmentSlideshowBinding binding;
+    private GridView gridView;
+    private DBHelper2 dbHelper2;
+    private ArrayList<Producto> producto = new ArrayList<>();
+    private CasoUsoProductos casoUsoProductos;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        try{
+            dbHelper2 = new DBHelper2(getContext());
+            casoUsoProductos = new CasoUsoProductos();
+            Cursor cursor = dbHelper2.getProductos();
+            producto = casoUsoProductos.llenarListaProductos(cursor);
+
+            gridView = (GridView) root.findViewById(R.id.gridViewProductos);
+            ProductoAdapter productoAdapter = new ProductoAdapter(root.getContext(), producto);
+            gridView.setAdapter(productoAdapter);
+        }catch (Exception e){
+            Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+
+            /*case R.id.add_product:
+                Toast.makeText(getContext(), "Agregar Produto", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), ProductFrom.class);
+                startActivity(intent);
+                return true;*/
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
